@@ -3,7 +3,7 @@
 GenNet is dedicated to delivering a scalable framework that enables applications to harness the power of a distributed worker network for AI inference, while also rewarding participants for contributing their processing capabilities. Initially focusing on AI-driven image generation, our long-term vision encompasses the provision of diverse AI services, such as text, video, voice, and sound generation and classification, among others. By leveraging the untapped potential of idle time on home and office systems, we aim to offer these services at more competitive prices than traditional cloud providers.
 
 ## How To Participate
-Participants will need a Nvidia RTX Capable GPU with the drivers installed as well as Docker and Docker Compose.
+Participants will need a Nvidia RTX-capable GPU with the Nvidia drivers installed as well as Docker and Docker Compose.
 
 ### Install Docker
 
@@ -29,8 +29,9 @@ TODO:
 - Replace <API_KEY> with your (Crypto TODO) wallet address in order to receive monthly rewards
 - Add the links to the models you selected in the previous step to the docker-compose.yml file in the same way as in the example below.
 - Replace any special characters in the file names with the '_' character in the output file at `-O` e.g.  `mdjrny-v4.ckpt` to `mdjrny_v4.ckpt`
+- The line containing `test` will ensure that models are not downloaded again when restarting the container
 - Separate links to models with `&& \`
-- run the container: `docker compose up -d`
+- run the container from the dir containing the docker-compose.yml file using: `docker compose up -d`
 - Rewards will be paid monthly to the address specified above
 
 ## Docker Compose Example File
@@ -52,7 +53,7 @@ services:
     restart: unless-stopped
     volumes:
       - models:/stable-diffusion-webui/models/Stable-diffusion/
-    ports:
+    ports: #Port per model - Starting at 12000
       - '12000:12000'
       - '12001:12001'
       - '12002:12002'
