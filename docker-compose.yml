@@ -1,0 +1,44 @@
+version: '3'
+#Make sure you have the nvida drivers installed on the host machine
+#Download the models to use in the container in the 'command' section below - Exmples are provided
+#Replace any special characters in the file names with the '_' character in the `-O` like `mdjrny-v4.ckpt` to `mdjrny_v4.ckpt`
+#Separate models with `&& \`
+#Keep your GPU memory in mind when adding/removing models.
+#The number and size of models you add should be less than your available video RAM
+
+services:
+  gen-net:
+    image: gennet/gen-net:latest
+    container_name: gen-net
+    environment:
+      - WORKER_ID=<API_KEY>
+    restart: unless-stopped
+    volumes:
+      - models:/stable-diffusion-webui/models/Stable-diffusion/
+    ports: #Port per model - Starting at 12000
+      - '12000:12000'
+      - '12001:12001'
+      - '12002:12002'
+      - '12003:12003'
+      - '12004:12004'
+      - '12005:12005'
+      - '12006:12006'
+      - '12007:12007'
+      - '12008:12008'
+      - '12009:12009'
+    command: bash -c "\
+      test -f /stable-diffusion-webui/models/Stable-diffusion/<model1_name>.ckpt || \
+      wget -N -O /stable-diffusion-webui/models/Stable-diffusion/<model1_name>.ckpt https://<url_to_model1>.ckpt && \
+      test -f /stable-diffusion-webui/models/Stable-diffusion/<model2_name>.ckpt || \
+      wget -N -O /stable-diffusion-webui/models/Stable-diffusion/<model2_name>.ckpt https://<url_to_model2>.ckpt && \
+      cd /artgen_backend/ && git reset --hard HEAD && git checkout main && git pull && \
+      /app/venv/bin/python /artgen_backend/api/worker_manager.py"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1 #all
+              capabilities: [gpu]
+volumes:
+  models:
