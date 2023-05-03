@@ -14,7 +14,9 @@ Participants will need a Nvidia RTX-capable GPU with the Nvidia drivers installe
 
 ### Nvidia Drivers
 - Make sure you have the nvida drivers installed on the host machine
-- Install the [Nvidia Container Toolkit](https://github.com/NVIDIA/nvidia-docker)
+- Install the [Nvidia Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#installation-guide)
+- Make sure you install `nvidia-container-toolkit-base` and `nvidia-container-toolkit`.
+- After installing the toolkit, you need to restart Docker.
 
 ### Choose Models to Host
 - Search [CivitAI](https://civitai.com/) or [HuggingFace](https://huggingface.co/) for the model(s) that you would like to host
